@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Media_Sync_Updater extends PW_GitHub_Updater {
 
   public $username = 'benplum';
-  public $repository = 'Media Sync';
+  public $repository = 'Media-Sync';
   public $requires = '5.0';
   public $tested = '5.0.2';
 
