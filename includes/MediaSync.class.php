@@ -404,7 +404,7 @@ if ( !class_exists( 'MediaSync' ) ) :
         {
             $selected = get_option( 'ms_sg_file_post_date' );
 
-            if(isset($_GET['file_post_date'])) { 
+            if(isset($_GET['file_post_date'])) {
                 $selected = $_GET['file_post_date'];
             }
             ?>
@@ -894,7 +894,7 @@ if ( !class_exists( 'MediaSync' ) ) :
 
         /**
          * Returns post date for file being imported based on selected option
-         * 
+         *
          * @since 1.1.0
          * @param string $file_path Absolute path to file being imported
          * @param string $type Selected option telling which date to find [default|file_time|smart_file_time]
@@ -1025,7 +1025,17 @@ if ( !class_exists( 'MediaSync' ) ) :
             $absolute_path = wp_normalize_path($absolute_path);
 
             // Always using forward slash ("/")
-            return str_replace(get_home_path(), self::MEDIA_SYNC_DS, $absolute_path);
+
+            $relative_path = str_replace(get_home_path(), self::MEDIA_SYNC_DS, $absolute_path);
+
+            // if (is_multisite()) {
+            //     $details = get_blog_details();
+            //     $prefix = $details->path;
+            //     $relative_path = str_replace($prefix, '/', $relative_path);
+            //     die($relative_path);
+            // }
+
+            return $relative_path;
         }
 
 
@@ -1243,6 +1253,12 @@ if ( !class_exists( 'MediaSync' ) ) :
                 // Should already have forward slashes since it's URL
                 $relative_path = parse_url($file_url, PHP_URL_PATH);
 
+                if (is_multisite()) {
+                    $details = get_blog_details();
+                    $prefix = $details->path;
+                    $relative_path = str_replace($prefix, '/', $relative_path);
+                }
+
                 $files[$relative_path] = array(
                     'id' => $post->ID,
                     'name' => $post->post_title,
@@ -1343,14 +1359,14 @@ if ( !class_exists( 'MediaSync' ) ) :
             return false;
         }
 
-        
+
         /**
          * Check if logged in user has access
          *
          * @since 1.1.0
          * @return boolean
          */
-        static public function media_sync_user_has_general_access() 
+        static public function media_sync_user_has_general_access()
         {
             if ( !current_user_can( 'upload_files' ) ) {
                 return false;

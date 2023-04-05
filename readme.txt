@@ -73,6 +73,10 @@ Please first try to turn on debugging by adding this: `define('WP_DEBUG', true);
 
 == Changelog ==
 
+= 1.3.0 =
+* Adding multisite support
+* Adding github updater
+
 = 1.2.9 =
 * Fix selecting multiple files without clicking on checkbox (e.g. shift-select).
 * Minor code cleanup.
