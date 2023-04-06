@@ -1094,6 +1094,23 @@ if ( !class_exists( 'MediaSync' ) ) :
          */
         static private function media_sync_get_list_of_files($current_dir_path, $files_in_db, $associated_filter)
         {
+            $ignored_dirs = [
+                self::$upload_dir_path . '/sites/',
+                self::$upload_dir_path . '/flags/',
+                self::$upload_dir_path . '/cache/',
+                self::$upload_dir_path . '/sucuri/',
+                self::$upload_dir_path . '/bulk-media-register-tmp/',
+                // self::$upload_dir_path . '/woocommerce_uploads/',
+            ];
+
+            if ( in_array( trailingslashit( $current_dir_path ), $ignored_dirs ) === true ) {
+                return null;
+            }
+
+            if (trailingslashit($current_dir_path) == self::$upload_dir_path . '/wpml /') {
+                return null;
+            }
+
             if(!self::$upload_dir_path) {
                 yield null;
             }
@@ -1120,10 +1137,15 @@ if ( !class_exists( 'MediaSync' ) ) :
                 // $is_scaled = preg_match('/-scaled(?=\.[a-z]{3,4}$)/im', $file_name) == true;
 
                 // If it contains image size at the end (i.e. -100x100.jpg) or ends with "-scaled" (also WP generated)
-                $is_thumb_or_scaled = preg_match('/(-scaled|[_-]\d+x\d+)(?=\.[a-z]{3,4}$)/im', $file_name) == true;
+                $is_thumb_or_scaled = preg_match('/(-pdf.jpg)|(-scaled|[_-]\d+x\d+)(?=\.[a-z]{3,4}$)/im', $file_name) == true;
+                // $is_pdf = preg_match('/(-pdf.jpg)/im', $file_name) == true;
 
                 // Default file/folder skipping rules
                 $is_ignored = $is_thumb_or_scaled;
+
+                // if ($is_pdf) {
+                //     $is_ignored = true;
+                // }
 
                 // Receive external rules for skipping files/folders
                 $is_ignored_external = apply_filters('media_sync_filter_is_scan_object_ignored', $is_ignored, $full_path, $file_name);

@@ -4,7 +4,7 @@
 Plugin Name: Media Sync
 Description:  Simple plugin to scan uploads directory and bring files to Media Library. Fork of https://wordpress.org/plugins/media-sync/.
 Plugin URI: https://github.com/benplum/Media-Sync
-Version: 1.3.0
+Version: 1.3.1
 Author: Ben Plum
 Author URI: https://benplum.com
 License: GPLv2 or later
